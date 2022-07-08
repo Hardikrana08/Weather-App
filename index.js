@@ -36,7 +36,6 @@ function fetchWeatherData() {
               <li>Weather - <li style="text-transform:lowercase;"> ${response.weather[0].main}</li></li>
               <img src="${iconURL}"></img>
           </div>
-              <li>Description - ${response.weather[0].description}</li>
               <li>Temperature - ${(response.main.temp - kelvin).toFixed(2)} C</li>
               <li>Humidity - ${response.main.humidity} %</li>
               <li>Country - ${response.sys.country}</li>
