@@ -29,7 +29,9 @@ function fetchWeatherData() {
         <div class="card-body>
           <h2 class="card-title" style="font-size: 2.25rem;">${response.name}</h2>
           <div class="card-text">
-              <li>Weather - ${response.weather[0].main}</li>
+          <div style="display: flex; align-items: center; gap: .25rem;">
+              <li>Weather - <li style="text-transform:lowercase;"> ${response.weather[0].main}</li></li>
+          </div>
               <li>Description - ${response.weather[0].description}</li>
               <li>Temperature - ${(response.main.temp - kelvin).toFixed(2)} C</li>
               <li>Humidity - ${response.main.humidity} %</li>
@@ -41,7 +43,10 @@ function fetchWeatherData() {
       `;
       cardContainer.innerHTML = string;
     } else {
-      console.log("Some error ocurred");
+        document.getElementById("message_alert").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("message_alert").style.display = "none";
+      }, 3000);
     }
   };
 
