@@ -20,9 +20,12 @@ function fetchWeatherData() {
     true
   );
 
+  
   xhr.onload = function () {
     if (this.status == 200) {
       let response = JSON.parse(this.responseText);
+      let iconCode = response.weather[0].icon
+      let iconURL =  "http://openweathermap.org/img/w/" + iconCode + ".png";
       let string = "";
       string += `
       <div class="card my-3" style="width: 18rem; background: transparent; color: white; border: 2px solid white; padding:1rem;">
@@ -31,6 +34,7 @@ function fetchWeatherData() {
           <div class="card-text">
           <div style="display: flex; align-items: center; gap: .25rem;">
               <li>Weather - <li style="text-transform:lowercase;"> ${response.weather[0].main}</li></li>
+              <img src="${iconURL}"></img>
           </div>
               <li>Description - ${response.weather[0].description}</li>
               <li>Temperature - ${(response.main.temp - kelvin).toFixed(2)} C</li>
