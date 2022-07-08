@@ -24,22 +24,25 @@ function fetchWeatherData() {
   xhr.onload = function () {
     if (this.status == 200) {
       let response = JSON.parse(this.responseText);
+
       let iconCode = response.weather[0].icon
-      let iconURL =  "http://openweathermap.org/img/w/" + iconCode + ".png";
+      let iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+      
       let string = "";
       string += `
       <div class="card my-3" style="width: 18rem; background: transparent; color: white; border: 2px solid white; padding:1rem;">
         <div class="card-body>
           <h2 class="card-title" style="font-size: 2.25rem;">${response.name}</h2>
           <div class="card-text">
-          <div style="display: flex; align-items: center; gap: .25rem;">
-              <li>Weather - <li style="text-transform:lowercase;"> ${response.weather[0].main}</li></li>
+          <div style="display: flex; align-items: center; gap: 0rem .25rem; height: 5vh;">
+              <li>Weather : <li style="text-transform:lowercase;"> ${response.weather[0].main}</li></li>
               <img src="${iconURL}"></img>
           </div>
-              <li>Temperature - ${(response.main.temp - kelvin).toFixed(2)} C</li>
-              <li>Humidity - ${response.main.humidity} %</li>
-              <li>Country - ${response.sys.country}</li>
-              <li>Timzone - ${response.timezone}</li>
+              <li>Description : ${response.weather[0].description}</li>
+              <li>Temperature : ${(response.main.temp - kelvin).toFixed(2)} C</li>
+              <li>Humidity : ${response.main.humidity} %</li>
+              <li>Country : ${response.sys.country}</li>
+              <li>Timzone : ${response.timezone}</li>
           </div>
         </div>
       </div>
