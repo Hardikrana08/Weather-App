@@ -8,53 +8,12 @@ document.querySelector("button").addEventListener("click", fetchWeatherData);
 function fetchWeatherData() {
   const input = document.querySelector("input");
   const cityName = input.value;
-  const kelvin = 273.15;
-  const cardContainer = document.querySelector(".card-container");
 
-  // Ajax HTTP Request
-  const xhr = new XMLHttpRequest();
+  const mainUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
 
-  xhr.open(
-    "GET",
-    `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`,
-    true
-  );
-
-  
-  xhr.onload = function () {
-    if (this.status == 200) {
-      let response = JSON.parse(this.responseText);
-
-      let iconCode = response.weather[0].icon
-      let iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
-      
-      let string = "";
-      string += `
-      <div class="card my-3" style="width: 18rem; background: transparent; color: white; border: 2px solid white; padding:1rem;">
-        <div class="card-body>
-          <h2 class="card-title" style="font-size: 2.25rem;">${response.name}</h2>
-          <div class="card-text">
-          <div style="display: flex; align-items: center; gap: 0rem .25rem; height: 5vh;">
-              <li>Weather : <li style="text-transform:lowercase;"> ${response.weather[0].main}</li></li>
-              <img src="${iconURL}"></img>
-          </div>
-              <li>Description : ${response.weather[0].description}</li>
-              <li>Temperature : ${(response.main.temp - kelvin).toFixed(2)} C</li>
-              <li>Humidity : ${response.main.humidity} %</li>
-              <li>Country : ${response.sys.country}</li>
-              <li>Timzone : ${response.timezone}</li>
-          </div>
-        </div>
-      </div>
-      `;
-      cardContainer.innerHTML = string;
-    } else {
-        document.getElementById("message_alert").style.display = "block";
-      setTimeout(() => {
-        document.getElementById("message_alert").style.display = "none";
-      }, 3000);
-    }
-  };
+  fetch(mainUrl)
+    .then((res) => res.json())
+    .then((data) => show_Weather_DOM(data));
 
   // Input validation
   if (input.value === "") {
@@ -64,8 +23,6 @@ function fetchWeatherData() {
     }, 3000);
   }
 
-  // Send the request
-  xhr.send();
   // Reset the value of the input
   input.value = "";
 }
@@ -74,3 +31,34 @@ function fetchWeatherData() {
 document.addEventListener("keydown", (event) => {
   if (event.keyCode === 13) fetchWeatherData();
 });
+
+function show_Weather_DOM(data) {
+  const kelvin = 273.15;
+  const cardContainer = document.querySelector(".card-container");
+  cardContainer.innerHTML = "";
+
+  let iconCode = data.weather[0].icon;
+  let iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+
+  let html = `
+  <div class="card my-3" style="width: 18rem; background: transparent; color: white; border: 2px solid white; padding:1rem;">
+        <div class="card-body>
+      <h2 class="card-title" style="font-size: 2.25rem;">${data.name}</h2>
+        <div class="card-text">
+          <div style="display: flex; align-items: center; gap: 0rem .25rem; height: 5vh;">
+              <li>Weather : <li style="text-transform:lowercase;"> ${
+                data.weather[0].main
+              }</li></li>
+              <img src="${iconURL}"></img>
+          </div>
+            <li>Description : ${data.weather[0].description}</li>
+            <li>Temperature : ${(data.main.temp - kelvin).toFixed(2)} C</li>
+            <li>Humidity : ${data.main.humidity} %</li>
+            <li>Country : ${data.sys.country}</li>
+            <li>Timzone : ${data.timezone}</li>
+        </div>
+      </div>
+</div>
+  `;
+  cardContainer.innerHTML = html;
+}
